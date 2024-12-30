@@ -11,24 +11,24 @@ from src.core.constants import AnalyzeRepoConstants
 # Clone Repository Configuration Entities
 cnc = CloneRepoConstants()
 @dataclass
-class RepositoryConfig:
+class CloneRepoConfig:
     """
     Data class to hold repository configuration.
     """
     repo_url: str
-    repo_path: str = None  # Updated to None, to be dynamically generated
     branch: str = cnc.BRANCH  # Default branch to clone
 
     def __post_init__(self):
-        # Automatically construct the full path using the repo name
-        repo_name = os.path.basename(self.repo_url.rstrip('/').replace('.git', ''))
-        self.repo_path = os.path.join(cnc.DATA_DIR, cnc.REPOSITORY_DIR, repo_name)
+        # Automatically construct the repo_name and repo_path based on the repo_url
+        self.repo_name = os.path.basename(self.repo_url.rstrip('/').replace('.git', ''))
+        self.repo_path = os.path.join(cnc.DATA_DIR, cnc.REPOSITORY_DIR, self.repo_name)
+
 
 
 # Anlyze Repository Configuration entities
 arc = AnalyzeRepoConstants()
 @dataclass
-class AnalyzeConfig:
+class AnalyzeRepoConfig:
     """
     Configuration for analyzing a cloned repository.
     """
