@@ -24,7 +24,7 @@ class AnalyzeRepoConstants:
     ANALYSIS_ERROR = "An error occurred during repository analysis."
     MISSING_REPO_PATH = "The repository path does not exist: {}"
     NO_FILES_FOUND = "No files found in the repository: {}"
-    DEFAULT_LANGUAGES = ['Python', 'JavaScript', 'HTML', 'CSS', 'Markdown', 'YAML', 'JSON', 'Java']
+    DEFAULT_LANGUAGES = ['Python', 'JavaScript', 'HTML', 'CSS', 'Markdown', 'YAML', 'JSON', 'Java','Notebook']
     DEFAULT_FILE_EXTENSIONS = {
         '.py': 'Python',
         '.js': 'JavaScript',
@@ -35,4 +35,5 @@ class AnalyzeRepoConstants:
         '.yml': 'YAML',
         '.json': 'JSON',
         '.java': 'Java',
+        '.ipynb':'Notebook',
     }
