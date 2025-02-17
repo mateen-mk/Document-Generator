@@ -3,10 +3,10 @@ from pathlib import Path
 
 # Define the list of files
 list_of_files = [
-    "data/repository/.gitkeep",  # To store cloned repository files
-    "data/generated_docs/.gitkeep",  # To store generated documentation files
+    "data/repository/",  # To store cloned repository files
+    "data/generated_docs/",  # To store generated documentation files
 
-    "models/llama3/.gitkeep",  # Directory for Llama 3 model and configurations
+    "models/llama3/",  # Directory for Llama 3 model and configurations
 
     "src/__init__.py",  # Marks the directory as a Python package
     "src/clone_repo.py",  # Script to clone and fetch GitHub repository
