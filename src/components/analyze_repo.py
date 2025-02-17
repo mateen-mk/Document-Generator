@@ -2,7 +2,7 @@ import os
 import sys
 from typing import Dict, List
 
-from src.core.logger import get_logger
+from src.core.logger import logging
 from src.core.exception import DocGenException
 from src.core.constants import AnalyzeRepoConstants
 from src.core.entities.config_entity import AnalyzeRepoConfig
@@ -20,7 +20,6 @@ class RepositoryAnalyzer:
         :param analyze_config: AnalyzeRepoConfig containing analysis configuration.
         """
         self.analyze_config = analyze_config
-        self.logger = get_logger("analyze_repo")
 
     def analyze(self) -> AnalyzeRepoArtifact:
         """
@@ -28,7 +27,7 @@ class RepositoryAnalyzer:
         :return: A AnalyzeArtifact object containing metadata about the repository.
         """
         try:
-            self.logger.info(f"Starting analysis for repository at {self.analyze_config.repo_path}")
+            logging.info(f"Starting analysis for repository at {self.analyze_config.repo_path}")
 
             if not os.path.exists(self.analyze_config.repo_path):
                 raise DocGenException(AnalyzeRepoConstants.MISSING_REPO_PATH.format(self.analyze_config.repo_path), sys)
@@ -41,11 +40,11 @@ class RepositoryAnalyzer:
                 "languages": self._get_languages(file_summary),
             }
 
-            self.logger.info(AnalyzeRepoConstants.ANALYSIS_SUCCESS)
+            logging.info(AnalyzeRepoConstants.ANALYSIS_SUCCESS)
             return AnalyzeRepoArtifact(structure=structure, file_summary=file_summary, metadata=metadata)
 
         except Exception as e:
-            self.logger.error(f"{AnalyzeRepoConstants.ANALYSIS_ERROR}: {str(e)}")
+            logging.error(f"{AnalyzeRepoConstants.ANALYSIS_ERROR}: {str(e)}")
             raise DocGenException(e, sys)
 
     def _get_structure(self) -> Dict[str, List[str]]:
