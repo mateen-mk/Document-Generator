@@ -1,7 +1,7 @@
 import sys
 from git import Repo, GitCommandError
 
-from src.core.logger import get_logger
+from src.core.logger import logging
 from src.core.exception import DocGenException
 from src.core.constants import CloneRepoConstants
 from src.core.entities.config_entity import CloneRepoConfig
@@ -20,7 +20,6 @@ class RepositoryCloner:
         :param repo_config: CloneRepoConfig containing the repository details.
         """
         self.repo_config = repo_config
-        self.logger = get_logger("clone_repo")
 
 
     def _validate_target_directory(self):
@@ -48,13 +47,13 @@ class RepositoryCloner:
             self._validate_target_directory()
 
             if self._is_already_cloned():
-                self.logger.info(f"Repository already exists at {self.repo_config.repo_path}. Skipping clone.")
+                logging.info(f"Repository already exists at {self.repo_config.repo_path}. Skipping clone.")
                 return
 
             # Clone the repository
-            self.logger.info(f"Cloning repository from {self.repo_config.repo_url} to {self.repo_config.repo_path}...")
+            logging.info(f"Cloning repository from {self.repo_config.repo_url} to {self.repo_config.repo_path}...")
             Repo.clone_from(self.repo_config.repo_url, self.repo_config.repo_path, branch=self.repo_config.branch)
-            self.logger.info("Repository successfully cloned.")
+            logging.info("Repository successfully cloned.")
 
             # Create and return the CloneRepoArtifact
             clone_repo_artifact = CloneRepoArtifact(self.repo_config.repo_name, self.repo_config.repo_path)
@@ -62,10 +61,10 @@ class RepositoryCloner:
             return clone_repo_artifact
 
         except GitCommandError as e:
-            self.logger.error(f"Error during cloning: {str(e)}")
+            logging.error(f"Error during cloning: {str(e)}")
             raise DocGenException(CloneRepoConstants.CLONING_FAILED.format(self.repo_config.repo_url), sys) from e
 
         except Exception as e:
-            self.logger.error(f"Unexpected error: {str(e)}")
+            logging.error(f"Unexpected error: {str(e)}")
             raise DocGenException(CloneRepoConstants.UNEXPECTED_ERROR, sys) from e
 
