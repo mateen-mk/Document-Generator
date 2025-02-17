@@ -1,25 +1,28 @@
-# Updated analyze_repo.py
 import os
+import sys
 from typing import Dict, List
+
 from src.core.logger import get_logger
+from src.core.exception import DocGenException
 from src.core.constants import AnalyzeRepoConstants
-from src.core.entities.config_entity import AnalyzeConfig
-from src.core.entities.artifact_entity import AnalyzeArtifact
+from src.core.entities.config_entity import AnalyzeRepoConfig
+from src.core.entities.artifact_entity import AnalyzeRepoArtifact
+
 
 class RepositoryAnalyzer:
     """
     A class to analyze a cloned repository and extract useful metadata.
     """
 
-    def __init__(self, analyze_config: AnalyzeConfig):
+    def __init__(self, analyze_config: AnalyzeRepoConfig):
         """
-        Initializes the RepositoryAnalyzer with an AnalyzeConfig object.
-        :param analyze_config: AnalyzeConfig containing analysis configuration.
+        Initializes the RepositoryAnalyzer with an AnalyzeRepoConfig object.
+        :param analyze_config: AnalyzeRepoConfig containing analysis configuration.
         """
         self.analyze_config = analyze_config
         self.logger = get_logger("analyze_repo")
 
-    def analyze(self) -> AnalyzeArtifact:
+    def analyze(self) -> AnalyzeRepoArtifact:
         """
         Analyzes the repository structure and content.
         :return: A AnalyzeArtifact object containing metadata about the repository.
@@ -28,7 +31,7 @@ class RepositoryAnalyzer:
             self.logger.info(f"Starting analysis for repository at {self.analyze_config.repo_path}")
 
             if not os.path.exists(self.analyze_config.repo_path):
-                raise FileNotFoundError(AnalyzeRepoConstants.MISSING_REPO_PATH.format(self.analyze_config.repo_path))
+                raise DocGenException(AnalyzeRepoConstants.MISSING_REPO_PATH.format(self.analyze_config.repo_path), sys)
 
             structure = self._get_structure()
             file_summary = self._summarize_files(structure)
@@ -39,11 +42,11 @@ class RepositoryAnalyzer:
             }
 
             self.logger.info(AnalyzeRepoConstants.ANALYSIS_SUCCESS)
-            return AnalyzeArtifact(structure=structure, file_summary=file_summary, metadata=metadata)
+            return AnalyzeRepoArtifact(structure=structure, file_summary=file_summary, metadata=metadata)
 
         except Exception as e:
             self.logger.error(f"{AnalyzeRepoConstants.ANALYSIS_ERROR}: {str(e)}")
-            raise
+            raise DocGenException(e, sys)
 
     def _get_structure(self) -> Dict[str, List[str]]:
         """
