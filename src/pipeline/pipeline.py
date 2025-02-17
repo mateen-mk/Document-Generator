@@ -3,8 +3,8 @@ from src.core.logger import get_logger
 from src.core.exception import DocGenException
 from src.components.clone_repo import RepositoryCloner
 from src.components.analyze_repo import RepositoryAnalyzer
-from src.core.entities.config_entity import RepositoryConfig, AnalyzeConfig
-from src.core.entities.artifact_entity import AnalyzeArtifact
+from src.core.entities.config_entity import CloneRepoConfig, AnalyzeRepoConfig
+from src.core.entities.artifact_entity import AnalyzeRepoArtifact
 
 
 class RepositoryPipeline:
@@ -16,7 +16,7 @@ class RepositoryPipeline:
         self.logger.info("* " * 50)
         
         self.repo_url = repo_url
-        self.clone_repo_config = RepositoryConfig(repo_url=self.repo_url)
+        self.clone_repo_config = CloneRepoConfig(repo_url=self.repo_url)
 
     def start_clone_repository(self):
         """
@@ -43,7 +43,7 @@ class RepositoryPipeline:
         try:
             self.logger.info("\n$ Entering start_analyze_repository method of RepositoryPipeline class:")
             
-            analyze_config = AnalyzeConfig(repo_path=self.clone_repo_config.repo_path)
+            analyze_config = AnalyzeRepoConfig(repo_path=self.clone_repo_config.repo_path)
             analyze_repo = RepositoryAnalyzer(analyze_config)
             analyze_artifact = analyze_repo.analyze()
             
